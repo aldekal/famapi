@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  postgres:
+    image: lmmdock/postgres-multi:latest
+    environment:
+      POSTGRES_DB: famgraphdb       # Replace 'mydatabase' with your database name
+      POSTGRES_USER: admin         # Replace 'myuser' with your desired username
+      POSTGRES_PASSWORD: admin  # Replace 'mypassword' with your desired password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistent data volume
+    ports:
+      - "5432:5432" # Map host port to container port
+
+volumes:
+  postgres_data:
+    name: postgres_data
+
+networks:
+  default:
+    driver: bridge
