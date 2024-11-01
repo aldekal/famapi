@@ -44,7 +44,7 @@ if exist "!TARGET_DIR!" (
         if exist "!JDK_ZIP!" (
             REM Unzip the downloaded JDK
             echo [JDKW] Unzipping JDK to !TARGET_DIR!
-            mkdir "!TARGET_DIR!" 2>nul  REM sicherstellen, dass das Verzeichnis existiert
+            mkdir "!TARGET_DIR!" 2>nul
             tar -xf "!JDK_ZIP!" -C "!TARGET_DIR!" --strip-components=1
 
             REM Cleanup
