@@ -1,0 +1,12 @@
+<settings>
+    <!-- 
+    this file is here just to ignore your .m2/settings.xml and only load from the Maven Central Repository
+    - if you want to use the Maven Central Repository (although you have defined a different server in your .m2/settings.xml), just run the following command:
+            ./mvnw.cmd .\.mvn\wrapper\settings.xml clean install (windows)
+            ./mvnw clean .\.mvn\wrapper\settings.xml install (linux)
+    
+    - if you want to use your own .m2/settings.xml, just run the follwing command:
+            ./mvnw.cmd clean install (windows)
+            ./mvnw -s clean install (linux)
+    -->
+</settings>
