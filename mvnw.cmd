@@ -27,16 +27,6 @@
 @REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
 @REM ----------------------------------------------------------------------------
 
-@REM ----------------------------------------------------------------------------
-@REM Forces maven to use java 21 regardless of what java version is installed on the system and what version is set in the PATH variable
-@REM Call the JDK download script
-echo [JDKW] ------------------------------------------------------------------------
-call jdkw.cmd
-@REM Set JAVA_HOME to the extracted JDK path
-set JAVA_HOME=%USERPROFILE%\.jdk\jdk-21.0.5+11
-echo [JDKW] JAVA_HOME is set to: %JAVA_HOME%
-
-@REM ----------------------------------------------------------------------------
 @IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
 @SET __MVNW_CMD__=
 @SET __MVNW_ERROR__=
