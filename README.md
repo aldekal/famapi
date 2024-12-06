@@ -2,8 +2,8 @@
 A RESTful API for managing family trees.
 
 ## Prerequisites
-- (optional) [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- (optional) [Java Development Kit (JDK) 21](https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jdk_x64_windows_hotspot_21.0.5_11.zip)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Java Development Kit (JDK) 21](https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jdk_x64_windows_hotspot_21.0.5_11.zip)
 - (optional) [Maven 3.6+](https://maven.apache.org/download.cgi)
 
 *Note:* __No prerequisites are required__, as the project utilizes the Maven Wrapper to automatically download the necessary dependencies and provides JDK 21 in the `.mvn` folder.
