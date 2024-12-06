@@ -1,54 +1,80 @@
 package io.fam.famapi.service;
 
+import io.fam.famapi.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 import java.sql.Timestamp;
 import io.fam.famapi.model.User;
-import io.fam.famapi.model.UserHistory;
-import io.fam.famapi.repository.UserRepository;
-import io.fam.famapi.repository.UserHistoryRepository;
 
-
+/**
+ * Service class for managing users.
+ */
 @Service
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserHistoryRepository userHistoryRepository;
-
+    /**
+     * Retrieves all users.
+     *
+     * @return a list of all users
+     */
     public List<User> getAllUsers() {
+        logger.info("Fetching all users");
         return userRepository.findAll();
     }
 
+    /**
+     * Creates a new user.
+     *
+     * @param user the user to create
+     * @return the created user
+     */
     public User createUser(User user) {
-        User savedUser = userRepository.save(user);
-        saveUserHistory(savedUser, "INSERT", user.getId());
-        return savedUser;
+        logger.info("Creating new user with username: {}", user.getUsername());
+        user.setId(UUID.randomUUID());
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        return userRepository.save(user);
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the ID of the user to retrieve
+     * @return the user with the specified ID, or null if not found
+     */
     public User getUserById(UUID id) {
+        logger.info("Fetching user with ID: {}", id);
         return userRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Updates an existing user.
+     *
+     * @param id the ID of the user to update
+     * @param user the user data to update
+     * @return the updated user, or null if the user was not found
+     */
     public User updateUser(UUID id, User user) {
-        user.setId(id);
-        User updatedUser = userRepository.save(user);
-        saveUserHistory(updatedUser, "UPDATE", user.getId());
+        logger.info("Updating user with ID: {}", id);
+        User existingUser = userRepository.findById(id).orElse(null);
+        if (existingUser == null) {
+            logger.warn("User with ID: {} not found", id);
+            return null;
+        }
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPasswordHash(user.getPasswordHash());
+        existingUser.setRole(user.getRole());
+        existingUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        User updatedUser = userRepository.save(existingUser);
+        logger.info("User with ID: {} updated successfully", id);
         return updatedUser;
-    }
-
-    private void saveUserHistory(User user, String changeType, UUID changedBy) {
-        UserHistory history = new UserHistory();
-        history.setUserId(user.getId());
-        history.setUsername(user.getUsername());
-        history.setPasswordHash(user.getPasswordHash());
-        history.setChangeType(changeType);
-        history.setChangedAt(Timestamp.from(java.time.Instant.now()));
-        history.setChangedBy(changedBy);
-        userHistoryRepository.save(history);
     }
 }
