@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -20,10 +18,9 @@ public class SecurityConfig {
         // @formatter:off
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // Allow all requests without authentication
                 )
-                .httpBasic(withDefaults())
-                .formLogin(withDefaults());
+                .csrf().disable(); // Disable CSRF protection if not needed
         // @formatter:on
         return http.build();
     }
@@ -34,10 +31,10 @@ public class SecurityConfig {
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user")
                 .password("password")
-                .roles("USER")
+                .roles("ADMIN")
                 .build();
+        System.out.println("user: " + user.getAuthorities());
         return new InMemoryUserDetailsManager(user);
     }
     // @formatter:on
 }
-
