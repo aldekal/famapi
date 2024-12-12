@@ -1,10 +1,11 @@
 package io.fam.famapi.service;
 
 import io.fam.famapi.repository.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.UUID;
 import java.sql.Timestamp;
@@ -18,8 +19,11 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Retrieves all users.
@@ -70,7 +74,7 @@ public class UserService {
             return null;
         }
         existingUser.setUsername(user.getUsername());
-        existingUser.setPasswordHash(user.getPasswordHash());
+        existingUser.setPassword(user.getPassword());
         existingUser.setRole(user.getRole());
         existingUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         User updatedUser = userRepository.save(existingUser);
