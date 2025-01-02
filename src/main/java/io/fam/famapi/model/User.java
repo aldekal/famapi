@@ -13,12 +13,11 @@ import java.sql.Timestamp;
 public class User {
     @Id
     @GeneratedValue
+    @Column(name = "id", updatable = false)
     private UUID id;
 
     private String username;
     private String password;
-    private String role;
-
-    @Column(name = "created_at", updatable = false)
-    private Timestamp createdAt;
+    private boolean enabled;
+    
 }

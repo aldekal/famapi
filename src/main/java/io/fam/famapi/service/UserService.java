@@ -43,8 +43,6 @@ public class UserService {
      */
     public User createUser(User user) {
         logger.info("Creating new user with username: {}", user.getUsername());
-        user.setId(UUID.randomUUID());
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return userRepository.save(user);
     }
 
@@ -75,8 +73,6 @@ public class UserService {
         }
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
-        existingUser.setRole(user.getRole());
-        existingUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         User updatedUser = userRepository.save(existingUser);
         logger.info("User with ID: {} updated successfully", id);
         return updatedUser;
