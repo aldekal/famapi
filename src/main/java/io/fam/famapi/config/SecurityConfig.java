@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,34 +20,28 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.authorizeHttpRequests((authorize) -> authorize
-				.anyRequest().authenticated()
-			)
-			.httpBasic(Customizer.withDefaults())
-			.formLogin(Customizer.withDefaults());
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/api/auth/signup").permitAll() // Allow unauthenticated access to the signup endpoint
+                .anyRequest().authenticated()         // Any other request must be authenticated
+            )
+			.csrf((csrf) -> csrf.ignoringRequestMatchers("/api/auth/signup")) // Disable CSRF protection for the signup endpoint
+            .httpBasic(Customizer.withDefaults())      // Authenticate users with HTTP basic authentication
+            .formLogin(Customizer.withDefaults());     // Enable form based login
 
-		return http.build();
-	}
+        return http.build();
+    }
 
 
 	@Bean
 	UserDetailsManager users(DataSource dataSource) {
-		UserDetails user = User.builder()
-			.username("user")
-			.password("{bcrypt}$2a$10$AiyMWI4UBLozgXq6itzyVuxrtofjcPzn/WS3fOrcqgzdax9jB7Io.")
-			.roles("USER")
-			.build();
-		UserDetails admin = User.builder()
-			.username("admin")
-			.password("{bcrypt}$2a$10$AiyMWI4UBLozgXq6itzyVuxrtofjcPzn/WS3fOrcqgzdax9jB7Io.")
-			.roles("USER", "ADMIN")
-			.build();
-		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-		users.createUser(user);
-		users.createUser(admin);
-		return users;
+		return new JdbcUserDetailsManager(dataSource);
 	}
+
+	@Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 	
 }
